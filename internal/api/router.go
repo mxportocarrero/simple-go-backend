@@ -19,9 +19,9 @@ func NewRouter(db database.Database) (http.Handler, error) {
 		DB: db,
 	}
 
+	apiRouter.HandleFunc("/users", userAPI.GetAllUsers).Methods("GET")
 	apiRouter.HandleFunc("/users", userAPI.CreateUser).Methods("POST")
-	// apiRouter.HandleFunc("/users", userAPI.CreateUser).Methods("POST")
-	// apiRouter.HandleFunc("/users", userAPI.CreateUser).Methods("POST")
+	apiRouter.HandleFunc("/users/{id}", userAPI.UpdateUser).Methods("PUT")
 
 	return router, nil
 }

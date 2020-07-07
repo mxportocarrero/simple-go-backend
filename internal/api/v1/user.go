@@ -74,3 +74,11 @@ func (api *UserAPI) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteResponse(w, http.StatusCreated, newUser)
 }
+
+func (api *UserAPI) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (api *UserAPI) UpdateUser(w http.ResponseWriter, r *http.Request) {
+
+}

@@ -10,6 +10,8 @@ import (
 
 type UserDB interface {
 	CreateUser(ctx context.Context, user *model.User) (*mongo.InsertOneResult, error)
+	UpdateUser(ctx context.Context, user *model.User) error
+	GetAllUsers(ctx context.Context, limit int, filterKey string, filterValue string) error
 }
 
 func (db *database) CreateUser(ctx context.Context, user *model.User) (*mongo.InsertOneResult, error) {
@@ -28,4 +30,12 @@ func (db *database) CreateUser(ctx context.Context, user *model.User) (*mongo.In
 	}
 
 	return result, nil
+}
+
+func (db *database) GetAllUsers(ctx context.Context, limit int, filterKey string, filterValue string) error {
+	return nil
+}
+
+func (db *database) UpdateUser(ctx context.Context, user *model.User) error {
+	return nil
 }
