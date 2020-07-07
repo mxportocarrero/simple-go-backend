@@ -10,6 +10,7 @@ import (
 
 // TODO build a simple wrapper for the DB
 type Database interface {
+	UserDB
 	Disconnect() error
 }
 
