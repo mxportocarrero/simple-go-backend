@@ -76,7 +76,36 @@ func (api *UserAPI) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *UserAPI) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user.go -> GetAllUsers()")
+	users := []model.User{} // empty slice
 
+	params := r.URL.Query()
+	logger.Debug("GET params", params)
+
+	ctx := r.Context()
+
+	cursor, err := api.DB.GetAllUsers(ctx, params.Get("limit"), params.Get("filterKey"), params.Get("filterValue"))
+	if err != nil {
+		logger.WithError(err).Warn("Error getting all users")
+		utils.WriteError(w, http.StatusBadRequest, "Error getting all users", nil)
+		return
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var user model.User
+		cursor.Decode(&user)
+		users = append(users, user)
+
+	}
+
+	if err := cursor.Err(); err != nil {
+		logger.WithError(err).Warn("Error getting all users with cursor")
+		utils.WriteError(w, http.StatusBadRequest, "Error getting all users with cursor", nil)
+		return
+	}
+
+	utils.WriteResponse(w, http.StatusOK, users)
 }
 
 func (api *UserAPI) UpdateUser(w http.ResponseWriter, r *http.Request) {
