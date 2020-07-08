@@ -63,5 +63,23 @@ func (db *database) GetAllUsers(ctx context.Context, limit string, filterKey str
 }
 
 func (db *database) UpdateUser(ctx context.Context, user *model.User) error {
+	var err error
+	collection := db.conn.Database(db.dbName).Collection("users")
+
+	filter := bson.M{"_id": user.ID}
+
+	update := bson.M{
+		"$set": bson.M{
+			"name":  user.Name,
+			"phone": user.Phone,
+			"email": user.Email,
+		},
+	}
+
+	_, err = collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error())
+	}
+
 	return nil
 }

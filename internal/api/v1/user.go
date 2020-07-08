@@ -2,11 +2,14 @@ package v1
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"simple-go-backend/internal/api/utils"
 	"simple-go-backend/internal/database"
 	"simple-go-backend/internal/model"
 	"time"
+
+	"github.com/gorilla/mux"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -109,5 +112,34 @@ func (api *UserAPI) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *UserAPI) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	var err error
+	logger := logrus.WithField("func", "user.go -> UpdateUser()")
+	params := mux.Vars(r)
+	id, _ := primitive.ObjectIDFromHex(params["id"])
 
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.WithError(err).Warn("Error insert valid user info")
+		utils.WriteError(w, http.StatusBadRequest, "Error insert valid user info", nil)
+		return
+	}
+
+	// build new user
+	user := model.User{
+		ID: id,
+	}
+	json.Unmarshal(reqBody, &user)
+	logger.Debugf("%+v", user)
+
+	ctx := r.Context()
+
+	err = api.DB.UpdateUser(ctx, &user)
+
+	if err != nil {
+		logger.WithError(err).Warn("Error updating user")
+		utils.WriteError(w, http.StatusBadRequest, "Error updating", nil)
+		return
+	}
+
+	utils.WriteResponse(w, http.StatusOK, user)
 }
