@@ -1,7 +1,9 @@
 # simple-go-backend
+
 this project implements a basic rest api with Go lang.
 
 ## Running local server
+
 it requires a local mongoDB server running host at port `"mongodb://localhost:27017"`. Check .env file
 
     go run cmd/server/main.go
@@ -12,7 +14,9 @@ there is also a first glance of integration with docker and docker-compose. Chec
     docker-compose up server
 
 ## Endpoints
-### Create User (Working)
+
+### Create User
+
     http://localhost:8000/api/v1/users (POST)
 
 body params:
@@ -23,7 +27,8 @@ body params:
     "email": "mxads@google.com"
     }
 
-### Get all Users (Not Working)
+### Get all Users
+
     http://localhost:8000/api/v1/users (GET)
 
 query params:
@@ -34,7 +39,8 @@ query params:
     "filterValue": string
     }
 
-### Update User (Not Working)
+### Update User
+
     http://localhost:8000/api/v1/users/{id} (PUT)
 
 body params:
@@ -47,15 +53,15 @@ body params:
 
 ## File Structure
 
- - cmd/server: main executable dir. Server initializtion goes here
- - internal: hosts most the application packages
-   - api: host all versions of the api 
-     - utils: various utils functions
-     - v1: first release, contains all handlers used by router
-    - config: alternative file to hold variables
-    - database: database definition and connection
-    - model: all entities comming from the DB
- - vendor: auxiliar folder for dependedcy cnsistency
- - docker-compose-yml/Dockerfile integration config for Docker
- - go.mod/go.sum: depency gestor comming from go modules
- - Makefile: compilation file for building application image
+- cmd/server: main executable dir. Server initializtion goes here
+- internal: hosts most the application packages
+  - api: host all versions of the api
+    - utils: various utils functions
+    - v1: first release, contains all handlers used by router
+  - config: alternative file to hold variables
+  - database: database definition and connection
+  - model: all entities comming from the DB
+- vendor: auxiliar folder for dependedcy cnsistency
+- docker-compose-yml/Dockerfile integration config for Docker
+- go.mod/go.sum: depency gestor comming from go modules
+- Makefile: compilation file for building application image
